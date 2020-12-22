@@ -4,10 +4,19 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+import { Provider } from 'react-redux';
+import { createStore, combineReducers } from 'redux';
+
+import todoReducer from './store/reducers/my_reducers';
+
+const rootReducer = combineReducers({td: todoReducer,});
+const store = createStore((state = {}, action) => state);
+
+
 ReactDOM.render(
-  <React.StrictMode>
+  <Provider store={store}>
     <App />
-  </React.StrictMode>,
+  </Provider>,
   document.getElementById('root')
 );
 

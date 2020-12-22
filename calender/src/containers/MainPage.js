@@ -1,5 +1,4 @@
 import React,{Component} from 'react';
-import {Redirect} from 'react-router-dom';
 
 import './MainPage.css';
 
@@ -9,7 +8,6 @@ import DateBox from '../components/DateBox';
 
 
 class MainPage extends Component{
-
 
 
 	render(){

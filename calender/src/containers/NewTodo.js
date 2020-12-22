@@ -1,5 +1,6 @@
 import React,{Component} from 'react';
-import {NavLink} from 'react-router-dom';
+import {connect} from 'react-redux';
+import * as action_types from '../store/actions/action_types';
 
 import './NewTodo.css';
 
@@ -10,7 +11,10 @@ class NewTodo extends Component{
 	}
 	
 	clickSubmit = () =>{
-		alert('Submitted!')
+		this.props.onStoreTodo(this.state.title, this.state.content);
+		alert('Submitted!');
+		this.props.history.push('/main');
+		
 	}
 
 	render(){
@@ -32,10 +36,17 @@ class NewTodo extends Component{
 				onChange ={(event) => this.setState({content:event.target.value})}>
 				</textarea>
 				
-				<NavLink to ='/main' onClick={()=>this.clickSubmit()} className = 'Submit'> Submit</NavLink>
+				<button onClick={()=>this.clickSubmit()} className = 'Submit'> Submit</button>
 			</div>	
 		);
 	}
 }
 
-export default NewTodo;
+const mapDispatchToProps = dispatch =>{
+	return{
+		onStoreTodo: (title, content) =>
+		dispatch({ type: action_types.ADD_TODO, title: title, content: content})
+	};
+};
+
+export default connect(null,mapDispatchToProps)(NewTodo);
