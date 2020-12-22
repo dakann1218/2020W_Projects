@@ -1,0 +1,34 @@
+.DateBox{
+	box-sizing: border-box;
+	border: 0.5px solid;
+	width: 120px;
+	height: 120px;
+	font-size: 1rem;
+	text-align:left;
+	display: inline-block;
+	background: white;
+}
+
+.Date{
+	background: orange;
+}
+
+.Todo_link{
+	display:block;
+
+	text-decoration:none;
+	color: black;
+	font-weight: bold;
+	
+	background: green;
+}
+
+.NewTodo_link{
+	display:block;
+
+	text-decoration:none;
+	color: black;
+	font-weight: bold;
+	
+	background:pink;
+}
