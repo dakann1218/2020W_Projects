@@ -10,7 +10,7 @@ import { createStore, combineReducers } from 'redux';
 import todoReducer from './store/reducers/my_reducers';
 
 const rootReducer = combineReducers({td: todoReducer,});
-const store = createStore((state = {}, action) => state);
+const store = createStore(rootReducer);
 
 
 ReactDOM.render(

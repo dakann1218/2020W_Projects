@@ -1,5 +1,7 @@
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
+import {Redirect} from 'react-router-dom';
+
 import * as action_types from '../store/actions/action_types';
 
 import './NewTodo.css';
@@ -8,16 +10,22 @@ class NewTodo extends Component{
 	state = {
 		title:'',
 		content:'',
+		date: this.props.match.params.date,
+		submitted:false,
 	}
 	
 	clickSubmit = () =>{
-		this.props.onStoreTodo(this.state.title, this.state.content);
+		this.props.StoreTodo(this.state.date ,this.state.title, this.state.content);
 		alert('Submitted!');
-		this.props.history.push('/main');
+		this.setState({submitted:true});
 		
 	}
 
 	render(){
+		if (this.state.submitted){
+			return	<Redirect to='/main'/>
+		}
+		
 		return(
 			<div className = 'NewTodo'>
 				<h1>New Todo</h1>
@@ -25,6 +33,7 @@ class NewTodo extends Component{
 				<label>Title</label>
 				<input 
 				className = 'Title'
+				placeholder = {'New Todo\'s Title!'}
 				value = {this.state.title}
 				onChange ={(event) => this.setState({title:event.target.value})}>
 				</input>
@@ -32,6 +41,7 @@ class NewTodo extends Component{
 				<label>Content</label>
 				<textarea
 				className = 'Content'
+				placeholder = 'Write you content here...'
 				value = {this.state.content}
 				onChange ={(event) => this.setState({content:event.target.value})}>
 				</textarea>
@@ -44,8 +54,8 @@ class NewTodo extends Component{
 
 const mapDispatchToProps = dispatch =>{
 	return{
-		onStoreTodo: (title, content) =>
-		dispatch({ type: action_types.ADD_TODO, title: title, content: content})
+		StoreTodo: (date, title, content) =>
+		dispatch({ type: action_types.ADD_TODO, date: date,title: title, content: content})
 	};
 };
 

@@ -11,7 +11,7 @@ function App() {
 	  <div className="App">
     		<Switch>
 	  	<Route path = '/main' exact render = {() => <MainPage title = 'My calender'/>} />
-		<Route path = '/newtodo' exact render = {()=> <NewTodo/>} />
+	  	<Route path = '/newtodo/:date' exact component = {NewTodo} />
 	  	<Route path = '/todo' exact render = {() => <Todo/>} />
 	  	<Redirect exact from = '/' to = '/main' />
 	  	<Route render = {()=> <h1>Not Found</h1>} />

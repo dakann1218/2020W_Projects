@@ -1,21 +1,28 @@
 .DateBox{
+	border: 1px solid;
 	box-sizing: border-box;
-	border: 0.5px solid;
 	width: 120px;
 	height: 120px;
-	font-size: 1rem;
+	font-size: 15px;
 	text-align:left;
-	display: inline-block;
+	display:table-cell;	
+	flex:1;
 	background: white;
 }
 
-.Date{
+.DateBox .Date{
+	width: 118px;
+	height: 22px;
+	font-weight:bold;
+	display: inline-block;
 	background: orange;
 }
 
-.Todo_link{
-	display:block;
-
+.DateBox .Todo_link{
+	display: inline-block;
+	
+	width: 118px;
+	height: 22px;
 	text-decoration:none;
 	color: black;
 	font-weight: bold;
@@ -23,9 +30,11 @@
 	background: green;
 }
 
-.NewTodo_link{
-	display:block;
-
+.DateBox .NewTodo_link{
+	display: inline-block;
+	
+	width: 118px;
+	height: 22px;
 	text-decoration:none;
 	color: black;
 	font-weight: bold;
