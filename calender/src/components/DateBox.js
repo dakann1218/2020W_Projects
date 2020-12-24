@@ -23,12 +23,12 @@ class DateBox extends Component {
 		
 		//inline style
 		var dateStyle = {
-			color: 'black',
-			background: 'orange'
+			color: 'white',
+			background: 'DarkSlateGray'
 		}
 
 		//if input == 0 -> change to blank box
-		if(this.props.date == 0){
+		if(this.props.date === 0){
 			delete dateStyle['color'];
 			dateStyle['color'] = 'white';
 			delete dateStyle['background'];

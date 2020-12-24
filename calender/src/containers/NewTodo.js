@@ -14,11 +14,32 @@ class NewTodo extends Component{
 		submitted:false,
 	}
 	
-	clickSubmit = () =>{
-		this.props.StoreTodo(this.state.date ,this.state.title, this.state.content);
-		alert('Submitted!');
-		this.setState({submitted:true});
+	//Check if title is null or only spaces
+	checkTitle = () =>{
+		const title_split = this.state.title.split(' ');
 		
+		var only_space = true;
+		for (var i in title_split){
+			if(title_split[i] !=' '){
+				only_space  = false;
+			}
+		}
+
+		if (title_split[0] === ''){ return false;}
+		else if (only_space){ return false;}
+		else {return true;}
+	}
+
+
+	clickSubmit = () =>{
+		if(this.checkTitle()){
+			this.props.StoreTodo(this.state.date ,this.state.title, this.state.content);
+			alert('Submitted!');
+			this.setState({submitted:true});
+		}
+		else{
+			alert('Please enter title');
+		}
 	}
 
 	render(){

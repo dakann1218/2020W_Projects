@@ -1,16 +1,16 @@
-.NewTodo *{
+.Todo *{
 	display: block;
 	text-align: center;
 	font-weight: bold;
 }
 
-.NewTodo h1{
+.Todo h1{
 	font-size: 50px;
 	color: white;
 	margin: 20px;
 }
 
-.NewTodo .Title{
+.Todo .Title{
 	width: 500px;
 	box-sizing: border-box;
 	font-weight:normal;
@@ -20,7 +20,7 @@
 }
 
 
-.NewTodo .Content{
+.Todo .Content{
 	height: 500px;
 	width: 500px;
 	box-sizing: border-box;
@@ -32,14 +32,14 @@
 	text-align: left;
 }
 
-.NewTodo label{
+.Todo label{
 	text-align: center;
 	font-size: 30px;
 	padding: 15px 0px 5px;
 	color: black;
 }
 
-.NewTodo .Submit{
+.Todo .Submit{
 	margin: 20px auto;
 	text-decoration: none;	
 	font-size: 20px;

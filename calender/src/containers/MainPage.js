@@ -12,6 +12,8 @@ class MainPage extends Component{
 	state = {
 		start_day: 1,
 		total_days:31,
+		month: 12,
+		year: 2020,
 	}
 
 	weekmaker = (day,num) =>{
@@ -52,21 +54,47 @@ class MainPage extends Component{
 			count = count +1;
 		}
 		return(
-			<div className = 'row divider'>
+			<div className = 'row'>
 			{week}
 			</div>
 		);
 	}
-	calender = (day,num) =>{
 
-
+	onChangeMonthHandler = (direction) => {
+		const month = this.state.month
+		const year = this.state.year
+		if (direction === 'left'){
+			if (month === 1){
+				this.setState({month: 12, year: year - 1});
+			}
+			else {
+				this.setState({month: month - 1});
+			}
+		}
+		else{
+			if (month === 12){
+				this.setState({month: 1, year: year + 1});
+			}
+			else {
+				this.setState({month: month + 1});
+			}
+		}
 	}
-
-
-
-
-
+	
 	render(){
+		var weekday = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map((day)=>{
+			return (<div className = 'day'>
+				{day}
+				</div>
+			);
+		});
+
+		weekday = (
+				<div className = 'row'>
+				{weekday}
+				</div>
+		);
+
 		var calender = [0,1,2,3,4].map((i)=> {
 			if(i === 0){
 				return this.weekmaker(this.state.start_day,1);
@@ -75,16 +103,29 @@ class MainPage extends Component{
 				return this.weekmaker(0,1 - this.state.start_day + i*7);
 			}
 		});
-			
+		
+		calender = (
+			<div className = 'Calender'>
+			{weekday}
+			{calender}
+			</div>
+		);
+
 		return(
 			<div className = 'MainPage'>
-				<div className = 'Layout1'>
-					<h1 className = 'Title'>{this.props.title}</h1>
+				<div className = 'Layout1'>	
+					<h1 className = 'Title'>{this.props.title}</h1>	
+					<div className = 'Layout1-1'>	
+					<button className = 'Arrow left' onClick = {() => this.onChangeMonthHandler('left')}>{'< Left'}</button>
+					<div className = 'MYbox'>
+							<div className = 'Year'>{this.state.year}</div>
+							<div className = 'Month'>{this.state.month}</div>
+					</div>
+					<button className = 'Arrow right' onClick = {() => this.onChangeMonthHandler('right')}>{'Right >'}</button>
+					</div>
 				</div>
 				<div className = 'Layout2'>
-					<div className= 'Calender'>
 						{calender}
-					</div>
 				</div>
 			</div>
 		);
