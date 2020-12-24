@@ -11,9 +11,9 @@ import DateBox from '../components/DateBox';
 class MainPage extends Component{
 	state = {
 		start_day: 1,
-		total_days:31,
 		month: 12,
 		year: 2020,
+		days_in_month:['31','28','31','30','31','30','31','31','30','31','30','31']
 	}
 
 	weekmaker = (day,num) =>{
@@ -39,14 +39,14 @@ class MainPage extends Component{
 				);
 			}
 			else{
-				if (date > this.state.total_days){
+				if (date > this.state.days_in_month[this.state.month - 1]){
 					week.push(
 						<DateBox date={0}/>
 					);
 				}
 				else{
 					week.push(
-						<DateBox date = {date} />
+						<DateBox date = {date}/>
 					);
 				}
 			}
@@ -64,24 +64,54 @@ class MainPage extends Component{
 		const month = this.state.month
 		const year = this.state.year
 		if (direction === 'left'){
+			
 			if (month === 1){
-				this.setState({month: 12, year: year - 1});
+				this.setState({	month: 12, year: year - 1});
 			}
 			else {
 				this.setState({month: month - 1});
 			}
+
+			this.setState({ start_day: this.calculatePastStart()})
 		}
 		else{
+			
 			if (month === 12){
 				this.setState({month: 1, year: year + 1});
 			}
 			else {
 				this.setState({month: month + 1});
 			}
+
+			this.setState({ start_day: this.calculateNextStart()})
 		}
 	}
 	
+	calculatePastStart = () =>{
+		var tmp_start = this.state.start_day;
+		var tmp_days = this.state.days_in_month[(this.state.month+10)%12];
+		return (7 + tmp_start - tmp_days % 7)%7
+	}
+
+	calculateNextStart = () =>{
+		var tmp_start = this.state.start_day;
+		var tmp_days = this.state.days_in_month[this.state.month-1];
+		return (tmp_start + (tmp_days % 7))% 7;
+	}
+
 	render(){
+		const tmp_days = this.state.days_in_month;
+		if ((this.state.year)%4 === 0){
+			if(this.state.days_in_month[1]==='28'){
+				this.setState({days_in_month: [...tmp_days.slice(0,1),'29',...tmp_days.slice(2,12)]});
+			}
+		}
+		else{
+			if(this.state.days_in_month[1]==='29'){
+				this.setState({days_in_month: [...tmp_days.slice(0,1),'28',...tmp_days.slice(2,12)]});
+			}
+		}
+
 		var weekday = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map((day)=>{
 			return (<div className = 'day'>
 				{day}
@@ -94,8 +124,8 @@ class MainPage extends Component{
 				{weekday}
 				</div>
 		);
-
-		var calender = [0,1,2,3,4].map((i)=> {
+		const weeks = 1 + Math.ceil((this.state.days_in_month[this.state.month - 1] - 7 + this.state.start_day)/7);
+		var calender = [...Array(weeks).keys()].map((i)=> {
 			if(i === 0){
 				return this.weekmaker(this.state.start_day,1);
 			}
