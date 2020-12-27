@@ -39,6 +39,12 @@
 	color: black;
 }
 
+.NewTodo .Buttons{
+	display: flex;
+	justify-content: space-around;
+	width: 500px;
+	margin: 0px auto;
+}
 .NewTodo .Submit{
 	margin: 20px auto;
 	text-decoration: none;	

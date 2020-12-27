@@ -1,6 +1,7 @@
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
-import {Redirect} from 'react-router-dom';
+import {withRouter, Redirect} from 'react-router-dom';
+import axios from 'axios';
 
 import * as action_types from '../store/actions/action_types';
 
@@ -11,7 +12,7 @@ class NewTodo extends Component{
 		title:'',
 		content:'',
 		date: this.props.match.params.date,
-		submitted:false,
+		redirect:false,
 	}
 	
 	//Check if title is null or only spaces
@@ -30,20 +31,32 @@ class NewTodo extends Component{
 		else {return true;}
 	}
 
+	onClickReturn = () =>{
+		this.setState({redirect: true}); 
+	}
 
-	clickSubmit = () =>{
+	//When submit button is clicked
+	onClickSubmit = () =>{
 		if(this.checkTitle()){
 			this.props.StoreTodo(this.state.date ,this.state.title, this.state.content);
-			alert('Submitted!');
-			this.setState({submitted:true});
+			axios.post('/api/saveTodo/',{ 	'year': this.props.match.params.year,
+							'month': this.props.match.params.month,
+							'date': this.state.date,
+							'title': this.state.title,
+							'content': this.state.content })
+				.then(res => {
+					this.setState({redirect:true});
+					alert('Submitted!');})
+				.catch(err => alert('Error'));
 		}
 		else{
 			alert('Please enter title');
 		}
 	}
 
+	//Render
 	render(){
-		if (this.state.submitted){
+		if (this.state.redirect){
 			return	<Redirect to='/main'/>
 		}
 		
@@ -67,7 +80,10 @@ class NewTodo extends Component{
 				onChange ={(event) => this.setState({content:event.target.value})}>
 				</textarea>
 				
-				<button onClick={()=>this.clickSubmit()} className = 'Submit'> Submit</button>
+				<div className = 'Buttons'>
+				<button onClick={()=>this.onClickReturn()} className = 'Submit'>Return</button>
+				<button onClick={()=>this.onClickSubmit()} className = 'Submit'>Submit</button>
+				</div>
 			</div>	
 		);
 	}

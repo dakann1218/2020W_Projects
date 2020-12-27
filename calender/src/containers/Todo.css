@@ -12,6 +12,8 @@
 
 .Todo .Title{
 	width: 500px;
+	height: 30px;
+	background: white;
 	box-sizing: border-box;
 	font-weight:normal;
 	border: 1px solid;
@@ -28,7 +30,8 @@
 	border: 1px solid;
 	margin: auto;
 	padding: 10px;
-	
+	background: white;
+
 	text-align: left;
 }
 
@@ -39,7 +42,14 @@
 	color: black;
 }
 
-.Todo .Submit{
+.Todo .Buttons{
+	display: flex;
+	margin: 0px auto;
+	width: 500px;
+	justify-content: space-between;
+}
+
+.Todo .Buttons button{
 	margin: 20px auto;
 	text-decoration: none;	
 	font-size: 20px;

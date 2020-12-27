@@ -4,6 +4,7 @@ import './DateBox.css';
 
 
 class DateBox extends Component {
+
 	render(){
 
 		//get todo list
@@ -11,7 +12,7 @@ class DateBox extends Component {
 		if (this.props.todo){
 			todo_list = this.props.todo.map((title) => {
 				return(
-					<NavLink to = '/todo' className = 'Todo_link'>{title}</NavLink>
+					<NavLink to = {`/todo/${title[0]}`} className = 'Todo_link'>{title[1]}</NavLink>
 					);
 				}
 			);
@@ -19,7 +20,7 @@ class DateBox extends Component {
 
 		//get newtodo link
 		const new_todo = this.props.date ?
-		(<NavLink to ={`/newtodo/${this.props.date}`} className = 'NewTodo_link'>New Todo</NavLink>) : null;
+		(<NavLink to ={`/newtodo/${this.props.year}/${this.props.month}/${this.props.date}`} className = 'NewTodo_link'>New Todo</NavLink>) : null;
 		
 		//inline style
 		var dateStyle = {

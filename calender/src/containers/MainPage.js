@@ -1,5 +1,9 @@
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
+import axios from 'axios';
+
+import * as actionTypes from '../store/actions/action_types';
+
 
 import './MainPage.css';
 
@@ -9,21 +13,47 @@ import DateBox from '../components/DateBox';
 
 
 class MainPage extends Component{
+	
 	state = {
-		start_day: 1,
-		month: 12,
-		year: 2020,
-		days_in_month:['31','28','31','30','31','30','31','31','30','31','30','31']
+		start_day: this.props.storedStates['start_day'], //Number(this.props.match.params.start),
+		month:  this.props.storedStates['month'], //Number(this.props.match.params.month),
+		year:  this.props.storedStates['year'], //Number(this.props.match.params.year),
+		days_in_month:[31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
+		todo_titles:{},
+		need_update: true,
 	}
 
+	componentDidMount(){
+		if (this.state.need_update){
+			this.setState({need_update: false});
+			axios.post('/api/sendTodos/',{ 'year': this.state.year, 'month': this.state.month })
+				.then(res => {
+					this.setState({todo_titles: res.data.titles})})
+				.catch(err => alert('Main Page Error'));
+		}
+	}
+	
+	//Add todolist with first update
+	componentDidUpdate(){
+		if (this.state.need_update){
+			this.setState({need_update: false});
+			axios.post('/api/sendTodos/',{ 'year': this.state.year, 'month': this.state.month })
+				.then(res => {
+					this.setState({todo_titles: res.data.titles})})
+				.catch(err => alert('Main Page Error'));
+		}
+	}
+
+	//Make a row of week
 	weekmaker = (day,num) =>{
 		/* day : mon(0),tue(1),wed(2) ... -> hallow box on front: 0,1,2 ...
 		   start date
 		   dict: get title */
 		var week = [];
-		const dict = this.props.storedTodos;
 		var date = num;
 		var count = 0;
+		const todo_dict = this.state.todo_titles //{date: [[id,title],[id,title],.....], date:[....],....}
+
 		while(count < day){
 			count = count + 1;
 			week.push(
@@ -32,10 +62,18 @@ class MainPage extends Component{
 		}
 		while (count < 7){ 
 			//give num of dates in the month by prop to MainPage
-			if(date in dict){
-				const titles = dict[date].map((tuple)=>{return tuple[0];})
+			if(date in todo_dict){
+				let todo_list = []
+				
+				for (var key in todo_dict){
+					if (key == date){
+						for (var index in todo_dict[key]){
+							todo_list.push(todo_dict[key][index]);
+						}
+					}
+				}
 				week.push(
-					<DateBox todo= {titles} date = {date}/>
+					<DateBox todo = {todo_list} year = {this.state.year} month = {this.state.month} date = {date}/>
 				);
 			}
 			else{
@@ -46,7 +84,7 @@ class MainPage extends Component{
 				}
 				else{
 					week.push(
-						<DateBox date = {date}/>
+						<DateBox year = {this.state.year} month = {this.state.month} date = {date}/>
 					);
 				}
 			}
@@ -59,34 +97,36 @@ class MainPage extends Component{
 			</div>
 		);
 	}
-
+	
+	//When left/right button is clicked
 	onChangeMonthHandler = (direction) => {
-		const month = this.state.month
-		const year = this.state.year
+		
+		const month = this.state.month;
+		const year = this.state.year;
+		
 		if (direction === 'left'){
+			this.setState({start_day: this.calculatePastStart()});
 			
 			if (month === 1){
-				this.setState({	month: 12, year: year - 1});
+				this.setState({ month: 12, year: year - 1});
 			}
 			else {
-				this.setState({month: month - 1});
+				this.setState({ month: month-1});
 			}
-
-			this.setState({ start_day: this.calculatePastStart()})
 		}
 		else{
-			
-			if (month === 12){
-				this.setState({month: 1, year: year + 1});
+			this.setState({start_day: this.calculateNextStart()});
+ 			if (month === 12){
+				this.setState({ month: 1, year: year + 1});
 			}
-			else {
-				this.setState({month: month + 1});
+			else {	
+				this.setState({ month: month + 1});
 			}
-
-			this.setState({ start_day: this.calculateNextStart()})
 		}
+		this.setState({need_update: true});
 	}
-	
+
+	//Calcuate where the 1st day starts	
 	calculatePastStart = () =>{
 		var tmp_start = this.state.start_day;
 		var tmp_days = this.state.days_in_month[(this.state.month+10)%12];
@@ -99,16 +139,18 @@ class MainPage extends Component{
 		return (tmp_start + (tmp_days % 7))% 7;
 	}
 
+	//Render
 	render(){
+		this.props.onSaveState(this.state.year,this.state.month,this.state.start_day);
 		const tmp_days = this.state.days_in_month;
 		if ((this.state.year)%4 === 0){
-			if(this.state.days_in_month[1]==='28'){
-				this.setState({days_in_month: [...tmp_days.slice(0,1),'29',...tmp_days.slice(2,12)]});
+			if(this.state.days_in_month[1] === 28){
+				this.setState({days_in_month: [...tmp_days.slice(0,1), 29,...tmp_days.slice(2,12)]});
 			}
 		}
 		else{
-			if(this.state.days_in_month[1]==='29'){
-				this.setState({days_in_month: [...tmp_days.slice(0,1),'28',...tmp_days.slice(2,12)]});
+			if(this.state.days_in_month[1] === 29){
+				this.setState({days_in_month: [...tmp_days.slice(0,1), 28,...tmp_days.slice(2,12)]});
 			}
 		}
 
@@ -124,7 +166,8 @@ class MainPage extends Component{
 				{weekday}
 				</div>
 		);
-		const weeks = 1 + Math.ceil((this.state.days_in_month[this.state.month - 1] - 7 + this.state.start_day)/7);
+		
+		const weeks = 1 + Math.ceil((this.state.days_in_month[this.state.month - 1] - 7 + this.state.start_day)/7);	
 		var calender = [...Array(weeks).keys()].map((i)=> {
 			if(i === 0){
 				return this.weekmaker(this.state.start_day,1);
@@ -144,7 +187,7 @@ class MainPage extends Component{
 		return(
 			<div className = 'MainPage'>
 				<div className = 'Layout1'>	
-					<h1 className = 'Title'>{this.props.title}</h1>	
+					<h1 className = 'Title'>My calender</h1>	
 					<div className = 'Layout1-1'>	
 					<button className = 'Arrow left' onClick = {() => this.onChangeMonthHandler('left')}>{'< Left'}</button>
 					<div className = 'MYbox'>
@@ -167,7 +210,18 @@ class MainPage extends Component{
 const mapStateToProps = state =>{
 	return{
 		storedTodos: state.td.todos,
+		storedStates: state.td.states,
 	}
 }
 
-export default connect(mapStateToProps,null)(MainPage);
+const mapDispatchToProps = dispatch =>{
+	return{
+		onGetTodos: (year, month) => dispatch({type: actionTypes.GET_TODOS, year: year, month: month}),
+		onSaveState: (year, month, start_day) => dispatch(
+			{type: actionTypes.SAVE_STATE, year: year, month: month, start_day: start_day}
+		),
+	}
+}
+
+
+export default connect(mapStateToProps,mapDispatchToProps)(MainPage);

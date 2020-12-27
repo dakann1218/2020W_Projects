@@ -8,9 +8,12 @@ import { Provider } from 'react-redux';
 import { createStore, combineReducers } from 'redux';
 
 import todoReducer from './store/reducers/my_reducers';
-
+import axios from 'axios';
 const rootReducer = combineReducers({td: todoReducer,});
 const store = createStore(rootReducer);
+
+axios.defaults.xsrfCookieName = 'csrftoken';
+axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 
 
 ReactDOM.render(
