@@ -5,7 +5,7 @@
 
 ### 1.'/main'  
 ![models](https://github.com/dakann1218/2020W_Projects/blob/main/calender/wiki/Calender_readme1.png)  
-1.You can change month by clicking 'left'/'right' button. 
+1.You can change month by clicking 'left'/'right' button.  
 2.You can create new todo by clicking 'New Todo'.  
 3.You can check your todo by clicking the title.  
   
