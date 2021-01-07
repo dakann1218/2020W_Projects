@@ -1,5 +1,4 @@
 import * as action_types from '../actions/action_types';
-import axios from 'axios';
 
 const initialState = {
 	states: {'year':2020, 'month':12, 'start_day':1},

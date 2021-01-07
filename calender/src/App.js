@@ -1,6 +1,5 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
-import { ConnectedRouter} from 'connected-react-router';
 
 import MainPage from './containers/MainPage'
 import NewTodo from './containers/NewTodo'

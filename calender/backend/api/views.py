@@ -22,7 +22,7 @@ def saveTodo(request):  #recieve year, month, date, title, content
         
         newtodo = Todo(year = year, month = month, date = date, title = title, content = content)
         newtodo.save()
-
+        print(Todo.objects.all())
         return HttpResponse(status=201)
     
     elif request.method == 'PUT':

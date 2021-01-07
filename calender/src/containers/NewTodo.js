@@ -1,6 +1,6 @@
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
-import {withRouter, Redirect} from 'react-router-dom';
+import { Redirect} from 'react-router-dom';
 import axios from 'axios';
 
 import * as action_types from '../store/actions/action_types';
@@ -21,7 +21,7 @@ class NewTodo extends Component{
 		
 		var only_space = true;
 		for (var i in title_split){
-			if(title_split[i] !=' '){
+			if(title_split[i] !==' '){
 				only_space  = false;
 			}
 		}
