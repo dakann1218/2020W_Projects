@@ -1,4 +1,4 @@
-from django.http import HttpResponse, HttpResponseNotAllowed,JsonResponse
+from django.http import HttpResponse, HttpResponseNotAllowed, JsonResponse
 from django.views.decorators.csrf import ensure_csrf_cookie
 import json
 
