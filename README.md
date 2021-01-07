@@ -4,8 +4,8 @@ Calender
 -------------
 
 '/main'
--You can create new todo by clicking 'New Todo'.
--You can check your todo by clicking the title.
+\n-You can create new todo by clicking 'New Todo'.
+\n-You can check your todo by clicking the title.
 -You can change month by clicking 'left'/'right' button.
 
 '/newtodo/${month}/${date}'
