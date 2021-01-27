@@ -10,9 +10,9 @@ class DateBox extends Component {
 		//get todo list
 		var todo_list;
 		if (this.props.todo){
-			todo_list = this.props.todo.map((title) => {
+			todo_list = this.props.todo.map((title, index) => {
 				return(
-					<NavLink to = {`/todo/${title[0]}`} className = 'Todo_link'>{title[1]}</NavLink>
+					<NavLink to = {`/todo/${title[0]}`} className = 'Todo_link' key = {index}>{title[1]}</NavLink>
 					);
 				}
 			);
@@ -38,8 +38,8 @@ class DateBox extends Component {
 
 		//return html
 		return(
-			<div class = 'DateBox'>
-				<div class = 'Date' style={dateStyle}>
+			<div className = 'DateBox'>
+				<div className = 'Date' style={dateStyle}>
 					{this.props.date}
 				</div>
 				{todo_list}

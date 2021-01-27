@@ -42,49 +42,63 @@ class MainPage extends Component{
 					this.setState({todo_titles: res.data.titles})})
 				.catch(err => alert('Main Page Error'));
 		}
+		const tmp_days = this.state.days_in_month;
+		if ((this.state.year)%4 === 0){
+			if(this.state.days_in_month[1] === 28){
+				this.setState({days_in_month: [...tmp_days.slice(0,1), 29,...tmp_days.slice(2,12)]});
+			}
+		}
+		else{
+			if(this.state.days_in_month[1] === 29){
+				this.setState({days_in_month: [...tmp_days.slice(0,1), 28,...tmp_days.slice(2,12)]});
+			}
+		}
 	}
 
 	//Make a row of week
-	weekmaker = (day,num) =>{
+	weekmaker = (day,num,week_key) =>{
 		/* day : mon(0),tue(1),wed(2) ... -> hallow box on front: 0,1,2 ...
 		   start date
 		   dict: get title */
 		var week = [];
 		var date = num;
 		var count = 0;
+		var element_num = 0;
 		const todo_dict = this.state.todo_titles //{date: [[id,title],[id,title],.....], date:[....],....}
 
 		while(count < day){
 			count = count + 1;
+			element_num++;
 			week.push(
-				<DateBox date={0}/>
+				<DateBox key = {element_num} date={0}/>
 			);
 		}
-		while (count < 7){ 
-			//give num of dates in the month by prop to MainPage
+		while (count < 7){
+			element_num++;
+			//give number of dates in the month by prop to MainPage
 			if(date in todo_dict){
 				let todo_list = []
 				
 				for (var key in todo_dict){
-					if (key == date){
+					if (Number(key) === date){
 						for (var index in todo_dict[key]){
 							todo_list.push(todo_dict[key][index]);
 						}
 					}
 				}
 				week.push(
-					<DateBox todo = {todo_list} year = {this.state.year} month = {this.state.month} date = {date}/>
+					<DateBox key = {element_num} todo = {todo_list} year = {this.state.year} month = {this.state.month} date = {date}/>
 				);
 			}
 			else{
 				if (date > this.state.days_in_month[this.state.month - 1]){
 					week.push(
-						<DateBox date={0}/>
+						<DateBox key = {element_num} date={0}/>
 					);
 				}
 				else{
 					week.push(
-						<DateBox year = {this.state.year} month = {this.state.month} date = {date}/>
+						<DateBox key = {element_num} year = {this.state.year} month = {this.state.month} date = {date}/>
 					);
 				}
 			}
@@ -92,7 +106,7 @@ class MainPage extends Component{
 			count = count +1;
 		}
 		return(
-			<div className = 'row'>
+			<div className = 'row' key = {week_key}>
 			{week}
 			</div>
 		);
@@ -119,7 +133,7 @@ class MainPage extends Component{
  			if (month === 12){
 				this.setState({ month: 1, year: year + 1});
 			}
-			else {	
+			else {
 				this.setState({ month: month + 1});
 			}
 		}
@@ -141,21 +155,8 @@ class MainPage extends Component{
 
 	//Render
 	render(){
-		this.props.onSaveState(this.state.year,this.state.month,this.state.start_day);
-		const tmp_days = this.state.days_in_month;
-		if ((this.state.year)%4 === 0){
-			if(this.state.days_in_month[1] === 28){
-				this.setState({days_in_month: [...tmp_days.slice(0,1), 29,...tmp_days.slice(2,12)]});
-			}
-		}
-		else{
-			if(this.state.days_in_month[1] === 29){
-				this.setState({days_in_month: [...tmp_days.slice(0,1), 28,...tmp_days.slice(2,12)]});
-			}
-		}
-
-		var weekday = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map((day)=>{
-			return (<div className = 'day'>
+		var weekday = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map((day,index) =>{
+			return (<div className = 'day' key = { index }>
 				{day}
 				</div>
 			);
@@ -168,12 +169,12 @@ class MainPage extends Component{
 		);
 		
 		const weeks = 1 + Math.ceil((this.state.days_in_month[this.state.month - 1] - 7 + this.state.start_day)/7);	
-		var calender = [...Array(weeks).keys()].map((i)=> {
+		var calender = [...Array(weeks).keys()].map((i, index)=> {
 			if(i === 0){
-				return this.weekmaker(this.state.start_day,1);
+				return this.weekmaker(this.state.start_day,1,index);
 			}
 			else{
-				return this.weekmaker(0,1 - this.state.start_day + i*7);
+				return this.weekmaker(0,1 - this.state.start_day + i*7,index);
 			}
 		});
 		
