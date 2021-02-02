@@ -13,7 +13,7 @@ class Todo extends Component{
 	}
 	
 	componentDidMount() {
-		axios.get(`/api/sendContent/${this.props.match.params.id}` ) 
+		axios.get(`/api/sendContent/${this.props.match.params.id}`) 
 		.then(res => { this.setState({title: res.data.title, content: res.data.content});})
 		.catch(err => alert('Todo Page Error'));
 	}

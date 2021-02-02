@@ -5,7 +5,7 @@
 	border: 1px solid DarkCyan;
 	font-size: 15px;
 	text-align:left;
-	display:table-cell;	
+	display: table-cell;	
 	background: white;
 }
 
@@ -34,6 +34,13 @@
 	background: LightSalmon;
 }
 
+.DateBox .Todo_link:hover{
+	transform: scale(1.2);
+	background: Salmon;
+}
+
+
+
 .DateBox .NewTodo_link{
 	display: inline-block;
 	
@@ -46,4 +53,9 @@
 	font-weight: bold;
 	
 	background: Pink;
+}
+
+.DateBox .NewTodo_link:hover{
+	transform: scale(1.2);
+	background: HotPink;
 }
