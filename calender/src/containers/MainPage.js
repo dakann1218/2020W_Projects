@@ -37,10 +37,7 @@ class MainPage extends Component{
 	componentDidUpdate(){
 		if (this.state.need_update){
 			this.setState({need_update: false});
-			axios.post('/api/sendTodos/',{ 'year': this.state.year, 'month': this.state.month })
-				.then(res => {
-					this.setState({todo_titles: res.data.titles})})
-				.catch(err => alert('Main Page Error'));
+			this.getTodoTitles();
 		}
 		const tmp_days = this.state.days_in_month;
 		if ((this.state.year)%4 === 0){
@@ -53,8 +50,16 @@ class MainPage extends Component{
 				this.setState({days_in_month: [...tmp_days.slice(0,1), 28,...tmp_days.slice(2,12)]});
 			}
 		}
+		this.props.onSaveState(this.state.year, this.state.month, this.state.start_day);
 	}
 
+	async getTodoTitles(){
+		await axios.post('/api/sendTodos/',{ 'year': this.state.year, 'month': this.state.month })
+				.then(res => {
+					this.setState({todo_titles: res.data.titles})})
+				.catch(err => alert('Main Page Error'));
+	}
+	
 	//Make a row of week
 	weekmaker = (day,num,week_key) =>{
 		/* day : mon(0),tue(1),wed(2) ... -> hallow box on front: 0,1,2 ...
@@ -117,7 +122,6 @@ class MainPage extends Component{
 		
 		const month = this.state.month;
 		const year = this.state.year;
-		
 		if (direction === 'left'){
 			this.setState({start_day: this.calculatePastStart()});
 			
@@ -137,6 +141,7 @@ class MainPage extends Component{
 				this.setState({ month: month + 1});
 			}
 		}
+		this.setState({todo_titles: {}});
 		this.setState({need_update: true});
 	}
 
